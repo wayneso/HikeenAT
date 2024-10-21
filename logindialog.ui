@@ -89,7 +89,7 @@
     <string>密码：</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="masteraddrlineEdit">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -145,7 +145,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>CheckBox</string>
+    <string>记住密码</string>
    </property>
    <property name="checked">
     <bool>true</bool>

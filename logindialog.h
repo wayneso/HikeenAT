@@ -14,6 +14,8 @@ public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
     void loadSavedCredentials();
+
+    QString getMasteraddr() const;
     QString getUsername() const;
     QString getPassword() const;
 
