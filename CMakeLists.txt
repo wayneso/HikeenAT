@@ -17,10 +17,10 @@ set(PROJECT_SOURCES
     hikeenat.cpp
     hikeenat.h
     hikeenat.ui
-    logindialog.cpp
-    logindialog.h
-    logindialog.ui
     logo.rc
+    Graphics_api.h
+    Intel_include/cApiWrapper.cpp
+    Intel_api.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
