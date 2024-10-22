@@ -1,4 +1,5 @@
 #include "hikeenat.h"
+#include "syswindow.h"
 #include "./ui_hikeenat.h"
 
 #include "qt_func.h"
@@ -20,6 +21,7 @@ HikeenAT::HikeenAT(QWidget *parent) : QMainWindow(parent), ui(new Ui::HikeenAT)
 {
     ui->setupUi(this);
     ui->start_pushButton->setEnabled(false);
+    connect(ui->sys_action, &QAction::triggered, this, &HikeenAT::Open_Sys_Window);
 }
 
 HikeenAT::~HikeenAT()
@@ -128,13 +130,12 @@ void HikeenAT::on_start_pushButton_clicked(bool checked)
         ui->link_pushButton->setEnabled(false);
         static QTimer *Sent_Data_timer = new QTimer(this);
         connect(Sent_Data_timer, &QTimer::timeout, this, &HikeenAT::Sent_Data_Timer_CallBack);
-
         if (checked)
         {
             ui->start_pushButton->setText("停止");
             Sent_Data_timer->start(500);
         }
-        else // 按钮被再次按下
+        else
         {
             ui->start_pushButton->setText("开始");
             Sent_Data_timer->stop();
@@ -164,8 +165,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (CTL_RESULT_SUCCESS == I_I2C_Write(&Intel_API_Display, data))
         {
             Sent_Data_Count.success++;
-            appendLog(ui->informatio_textEdit,"Intel API Write success");
-
         }
         else
             Sent_Data_Count.fail++;
@@ -173,7 +172,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (CTL_RESULT_SUCCESS == I_I2C_Query(&Intel_API_Display, query_data))
         {
             Query_Data_Count.total++;
-            appendLog(ui->informatio_textEdit,"Intel API Query success");
         }
     }
 
@@ -182,7 +180,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (N_I2C_Write(hGpu, outputID, data))
         {
             Sent_Data_Count.success++;
-            appendLog(ui->informatio_textEdit,"Nvidia API Write success");
         }
         else
             Sent_Data_Count.fail++;
@@ -190,7 +187,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (N_I2C_Query(hGpu, outputID, query_data))
         {
             Query_Data_Count.total++;
-            appendLog(ui->informatio_textEdit,"Nvidia API Query success");
         }
     }
 
@@ -199,7 +195,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (A_I2C_Write(adlprocs, iAdapterIndex, iDisplayIndex, data))
         {
             Sent_Data_Count.success++;
-            appendLog(ui->informatio_textEdit,"AMD API Write success");
         }
         else
             Sent_Data_Count.fail++;
@@ -207,7 +202,6 @@ void HikeenAT::Sent_Data_Timer_CallBack()
         if (A_I2C_Query(adlprocs, iAdapterIndex, iDisplayIndex, query_data))
         {
             Query_Data_Count.total++;
-            appendLog(ui->informatio_textEdit,"AMD API Query success");
         }
     }
 
@@ -251,17 +245,34 @@ void HikeenAT::on_api_comboBox_currentIndexChanged(int index)
     }
 }
 
-
 void HikeenAT::on_clear_pushButton_clicked()
 {
     ui->informatio_textEdit->clear();
 }
-
 
 void HikeenAT::on_copy_pushButton_clicked()
 {
     QString text = ui->informatio_textEdit->toPlainText();
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(text);
+}
+
+void HikeenAT::Open_Sys_Window()
+{
+    if (!sysWindow)
+    {
+        this->setEnabled(false);  // 禁用主窗口
+        sysWindow = new syswindow();  // 创建 syswindow 实例
+        sysWindow->setWindowTitle("全局配置");
+        connect(sysWindow, &syswindow::windowClosed, this, &HikeenAT::Close_Sys_Window);
+    }
+    sysWindow->exec();  // 以模态方式显示窗口
+}
+
+
+void HikeenAT::Close_Sys_Window()
+{
+    sysWindow = nullptr; // 将指针置为 nullptr
+    this->setEnabled(true); // 恢复主窗口的可用性
 }
 

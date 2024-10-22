@@ -35,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         logindialog.h logindialog.cpp logindialog.ui
+        syswindow.h syswindow.cpp syswindow.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET HikeenAT APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

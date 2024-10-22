@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QSettings>
 
-
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LoginDialog) {

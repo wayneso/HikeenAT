@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "Graphics_api.h"
+#include "syswindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +23,10 @@ public:
 private slots:
     void Sent_Data_Timer_CallBack();
 
+    void Open_Sys_Window();
+
+    void Close_Sys_Window();
+
     void on_start_pushButton_clicked(bool checked);
 
     void on_link_pushButton_clicked(bool checked);
@@ -32,7 +37,10 @@ private slots:
 
     void on_copy_pushButton_clicked();
 
+
+
 private:
     Ui::HikeenAT *ui;
+    syswindow *sysWindow =  nullptr;
 };
 #endif // HIKEENAT_H
