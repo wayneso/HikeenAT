@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
+      <y>80</y>
       <width>361</width>
-      <height>481</height>
+      <height>431</height>
      </rect>
     </property>
    </widget>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>0</y>
+      <y>10</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>0</y>
+      <y>10</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -124,6 +124,32 @@
       <string>Tab 2</string>
      </attribute>
     </widget>
+   </widget>
+   <widget class="QLabel" name="sent_count_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>发送次数：0|0|0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="query_count_label">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>40</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>查询次数：0|0|0</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

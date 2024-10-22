@@ -14,7 +14,6 @@
 #include "user.h"
 #include "Graphics_api.h"
 
-ADLPROCS adlprocs = {0, 0, 0, 0};
 int iAdapterIndex = 0;
 int iDisplayIndex = 0;
 

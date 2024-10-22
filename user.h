@@ -35,7 +35,7 @@ typedef struct
     int length;
 } data_array;
 
-bool Rece_Data_Check(volatile int rece_data_arr[], int rece_data_len);
+bool Rece_Data_Check(int rece_data_arr[], int rece_data_len);
 int CalculateChecksum(QVector<int> dataArray[], int length, int checksum_type);
 
 #endif // USER_H

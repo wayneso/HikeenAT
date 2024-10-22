@@ -25,6 +25,9 @@ set(PROJECT_SOURCES
     user.cpp
     Intel_include/cApiWrapper.cpp
     Intel_api.cpp
+    AMD_api.cpp
+    Nvidia_api.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

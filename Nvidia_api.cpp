@@ -13,7 +13,6 @@
 #include <QVector>
 
 #include "Graphics_api.h"
-#include "ddcci_protocol.h"
 #include "qt_func.h"
 #include "user.h"
 

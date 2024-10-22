@@ -13,14 +13,14 @@
 #include <QVector>
 #include "user.h"
 
-int master_addr = 0x00;
-int slaver_addr = 0x00;
+int master_addr = DDCCI_master_addr;
+int slaver_addr = DDCCI_slaver_addr;
 int rece_data_arr[MAX_VALUES];
 int query_data_arr[MAX_VALUES];
 int query_data_len = 0;
 int rece_data_len = 0;
 
-bool Rece_Data_Check(volatile int rece_data_arr[], int rece_data_len){
+bool Rece_Data_Check(int rece_data_arr[], int rece_data_len){
 
     int checksum = 0x00;
     checksum = checksum ^ 0x50;//获取数据异或上0x50
@@ -49,14 +49,12 @@ int CalculateChecksum(QVector<int> dataArray[], int length, int checksum_type) {
             return -1;  // 返回一个错误代码表示无效的校验类型
         }
     }
-
     // 对于加法校验，处理超过255的情况
     if (checksum_type == checktype_add) {
         if (checksum > 255) {
             checksum = ~checksum + 1;  // 计算补码
         }
     }
-
     checksum &= 0xFF;  // 确保校验和在 0x00 到 0xFF 之间
     return checksum;  // 返回计算的校验和
 }

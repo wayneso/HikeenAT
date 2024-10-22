@@ -207,10 +207,10 @@ ctl_result_t I_I2C_Query(DeviceContext *context, QVector<int> Array)
                 // I2CArgs.Flags = CTL_I2C_FLAG_ATOMICI2C; // Need to set this to do Atomic I2C call
                 Result = ctlI2CAccess(context->hDisplayOutput[DisplayIndex], &I2CArgs);
 
-                // for (uint32_t j = 0; j < rece_data_len; j++)
-                // {
-                //     rece_data_arr[j] = I2CArgs.Data[j];
-                // }
+                for (uint32_t i = 0; i < rece_data_len; i++)
+                {
+                    rece_data_arr[i] = I2CArgs.Data[i];
+                }
                 ZeroMemory(&I2CArgs, sizeof(I2CArgs));
 
                 if (Result != CTL_RESULT_SUCCESS)

@@ -81,7 +81,6 @@ ctl_result_t I_I2C_Write(DeviceContext *context, QVector<int> Array);
 ctl_result_t I_I2C_Query(DeviceContext *context, QVector<int> Array);
 bool EnumerateDevicesAndDisplays(DeviceContext *context);
 void CleanupDeviceContext(DeviceContext *context);
-// ctl_result_t I_I2C_Transmit(QVector<int> Array, int command_type);
 
 /* Nvidia API*/
 extern NvU32 outputID;
@@ -95,7 +94,7 @@ extern int iAdapterIndex;
 extern int iDisplayIndex;
 extern ADLPROCS adlprocs;
 bool InitADL(ADLPROCS& adlprocs);
-void DeInitADL();
+void DeInitADL(ADLPROCS& adlprocs);
 int iInitDisplayNames(ADLPROCS& adlprocs, int& iAdapterIndex, int& iDisplayIndex);
 int vWriteI2c(ADLPROCS& adlprocs, char *lpucSendMsgBuf, int iSendMsgLen, int iAdapterIndex, int iDisplayIndex);
 int vWriteAndReadI2c(ADLPROCS& adlprocs, char *lpucSendMsgBuf, int iSendMsgLen, char *lpucRecvMsgBuf, int iRecvMsgLen, int iAdapterIndex,

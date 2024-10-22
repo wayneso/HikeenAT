@@ -10,6 +10,12 @@ enum
     Standard_DDCCI_INDEX,
 };
 
+typedef struct {
+    int16_t total;
+    int16_t success;
+    int16_t fail;
+} Data_Count, *Data_Count_p;
+
 void appendLog(QTextEdit *textEdit, const QString &message, const QVector<int> &dataArray = QVector<int>());
 
 void Sent_Data_Handle(QString sent_data_str, QVector<int> &sent_data_array);
