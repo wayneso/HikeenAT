@@ -40,8 +40,8 @@
 
 enum
 {
-    NONE_API,
-    Intel_API,
+    NONE_API = -1,
+    Intel_API = 0,
     Nvidia_API,
     AMD_API
 };

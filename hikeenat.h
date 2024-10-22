@@ -26,6 +26,12 @@ private slots:
 
     void on_link_pushButton_clicked(bool checked);
 
+    void on_api_comboBox_currentIndexChanged(int index);
+
+    void on_clear_pushButton_clicked();
+
+    void on_copy_pushButton_clicked();
+
 private:
     Ui::HikeenAT *ui;
 };

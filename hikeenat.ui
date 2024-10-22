@@ -43,7 +43,7 @@
    <widget class="QComboBox" name="displaynum_comboBox">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>150</x>
       <y>10</y>
       <width>80</width>
       <height>25</height>
@@ -109,9 +109,9 @@
     <property name="geometry">
      <rect>
       <x>400</x>
-      <y>10</y>
+      <y>0</y>
       <width>381</width>
-      <height>531</height>
+      <height>541</height>
      </rect>
     </property>
     <widget class="QWidget" name="tab">
@@ -130,7 +130,7 @@
      <rect>
       <x>20</x>
       <y>40</y>
-      <width>111</width>
+      <width>171</width>
       <height>25</height>
      </rect>
     </property>
@@ -141,14 +141,50 @@
    <widget class="QLabel" name="query_count_label">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>200</x>
       <y>40</y>
-      <width>121</width>
+      <width>181</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
      <string>查询次数：0|0|0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>10</y>
+      <width>53</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Index：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>10</y>
+      <width>53</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>显卡API：</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="api_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>80</width>
+      <height>25</height>
+     </rect>
     </property>
    </widget>
   </widget>
