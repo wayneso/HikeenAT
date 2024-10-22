@@ -19,6 +19,10 @@ set(PROJECT_SOURCES
     hikeenat.ui
     logo.rc
     Graphics_api.h
+    qt_func.h
+    qt_func.cpp
+    user.h
+    user.cpp
     Intel_include/cApiWrapper.cpp
     Intel_api.cpp
 )

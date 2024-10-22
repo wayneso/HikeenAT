@@ -36,6 +36,9 @@
     <property name="text">
      <string>连接平台</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QComboBox" name="displaynum_comboBox">
     <property name="geometry">
@@ -58,6 +61,9 @@
     </property>
     <property name="text">
      <string>开始</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox">

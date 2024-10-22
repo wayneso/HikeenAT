@@ -38,11 +38,57 @@ bool Intel_Api_Init()
     else
         return false;
 }
+/**
+ * @description: 枚举系统中的设备适配器及其显示输出设备
+ * @param {DeviceContext*} context 设备上下文结构体，用于保存枚举结果
+ * @return {bool} 返回true表示枚举成功，false表示失败
+ */
+bool EnumerateDevicesAndDisplays(DeviceContext *context)
+{
+    ctl_result_t Result = CTL_RESULT_SUCCESS; // 初始化返回结果变量
 
+    // 枚举设备并获取适配器数量
+    Result = ctlEnumerateDevices(hAPIHandle, &context->AdapterCount, context->hDevices);
+    if (Result != CTL_RESULT_SUCCESS)
+        return false; // 若失败，返回false
+
+    // 为适配器句柄分配内存
+    context->hDevices =
+        (ctl_device_adapter_handle_t *)malloc(sizeof(ctl_device_adapter_handle_t) * context->AdapterCount);
+
+    // 再次枚举设备，获取实际的适配器句柄
+    Result = ctlEnumerateDevices(hAPIHandle, &context->AdapterCount, context->hDevices);
+    if (Result != CTL_RESULT_SUCCESS)
+        return false; // 若失败，返回false
+
+    for (uint32_t AdapterIndex = 0; AdapterIndex < context->AdapterCount; AdapterIndex++)
+    {
+        context->DisplayCount = 0;
+
+        // 枚举当前适配器的显示输出设备并获取显示设备数量
+        Result = ctlEnumerateDisplayOutputs(context->hDevices[AdapterIndex], &context->DisplayCount,
+                                            context->hDisplayOutput);
+        if (Result != CTL_RESULT_SUCCESS)
+            return false; // 若失败，返回false
+
+        // 为显示输出句柄分配内存
+        context->hDisplayOutput =
+            (ctl_display_output_handle_t *)malloc(sizeof(ctl_display_output_handle_t) * context->DisplayCount);
+
+        // 再次枚举显示输出设备，获取实际的显示输出句柄
+        Result = ctlEnumerateDisplayOutputs(context->hDevices[AdapterIndex], &context->DisplayCount,
+                                            context->hDisplayOutput);
+        if (Result != CTL_RESULT_SUCCESS)
+            return false; // 若失败，返回false
+    }
+
+    return true;
+}
 /**
  * @description: I_I2C_Write
- * @param {ctl_display_output_handle_t} hDisplayOutput
- * @return ctl_result_t
+ * @param {DeviceContext*} context 设备上下文结构体，用于保存枚举结果
+ * @param {QVector<int>} Array 需要写入的数据
+ * @return ctl_result_t 返回I2C传输的结果
  */
 ctl_result_t I_I2C_Write(DeviceContext *context, QVector<int> Array)
 {
@@ -61,43 +107,43 @@ ctl_result_t I_I2C_Write(DeviceContext *context, QVector<int> Array)
                 return Result;
 
             // 检查显示设备是否已连接
-            bool IsDisplayAttached =
-                (0 != (DisplayProperties.DisplayConfigFlags & CTL_DISPLAY_CONFIG_FLAG_DISPLAY_ATTACHED));
+            bool IsDisplayAttached = (0 != (DisplayProperties.DisplayConfigFlags & CTL_DISPLAY_CONFIG_FLAG_DISPLAY_ATTACHED));
 
             if (IsDisplayAttached) // 如果显示设备已连接
             {
                 ctl_i2c_access_args_t I2CArgs = {0};
-                int len;
-                len = Array.at(2);
-                Array.remove(0, 2);
-                len ^= DDCCI_cmd_status_flag;
+                int len = Array.at(2); // 获取长度信息
+                Array.remove(0, 2);    // 移除数组中不需要的元素
+                len ^= DDCCI_cmd_status_flag; // 对长度进行操作
                 I2CArgs.Size = sizeof(ctl_i2c_access_args_t);
-                I2CArgs.OpType = CTL_OPERATION_TYPE_WRITE; // 发送
-                I2CArgs.Address = DDCCI_master_addr;
-                I2CArgs.Offset = DDCCI_slaver_addr;
-                I2CArgs.DataSize = len + 2;
+                I2CArgs.OpType = CTL_OPERATION_TYPE_WRITE; // 设定为写操作
+                I2CArgs.Address = DDCCI_master_addr;       // 主设备地址
+                I2CArgs.Offset = DDCCI_slaver_addr;        // 从设备地址
+                I2CArgs.DataSize = len + 2;                // 数据大小
 
-                for (size_t i = 0; i <= len; i++)
+                // 填充I2C数据
+                for (int i = 0; i <= len; i++)
                 {
                     I2CArgs.Data[i] = Array[i];
                 }
 
+                // 执行I2C写操作
                 Result = ctlI2CAccess(context->hDisplayOutput[DisplayIndex], &I2CArgs);
 
-                if (CTL_RESULT_SUCCESS != Result)
+                if (Result != CTL_RESULT_SUCCESS)
                 {
                     printf("ctlI2CAccess for I2C write returned failure code: 0x%X\n", Result);
-                }
-                ZeroMemory(&I2CArgs, sizeof(I2CArgs));
-
-                if (Result != CTL_RESULT_SUCCESS)
                     return Result;
+                }
+
+                ZeroMemory(&I2CArgs, sizeof(I2CArgs)); // 清零I2C参数
             }
         }
     }
 
     return Result;
 }
+
 /**
  * @description: I_I2C_Query
  * @param {ctl_display_output_handle_t} hDisplayOutput
@@ -176,52 +222,7 @@ ctl_result_t I_I2C_Query(DeviceContext *context, QVector<int> Array)
     return Result;
 }
 
-/**
- * @description: 枚举系统中的设备适配器及其显示输出设备
- * @param {DeviceContext*} context 设备上下文结构体，用于保存枚举结果
- * @return {bool} 返回true表示枚举成功，false表示失败
- */
-bool EnumerateDevicesAndDisplays(DeviceContext *context)
-{
-    ctl_result_t Result = CTL_RESULT_SUCCESS; // 初始化返回结果变量
 
-    // 枚举设备并获取适配器数量
-    Result = ctlEnumerateDevices(hAPIHandle, &context->AdapterCount, context->hDevices);
-    if (Result != CTL_RESULT_SUCCESS)
-        return false; // 若失败，返回false
-
-    // 为适配器句柄分配内存
-    context->hDevices =
-        (ctl_device_adapter_handle_t *)malloc(sizeof(ctl_device_adapter_handle_t) * context->AdapterCount);
-
-    // 再次枚举设备，获取实际的适配器句柄
-    Result = ctlEnumerateDevices(hAPIHandle, &context->AdapterCount, context->hDevices);
-    if (Result != CTL_RESULT_SUCCESS)
-        return false; // 若失败，返回false
-
-    for (uint32_t AdapterIndex = 0; AdapterIndex < context->AdapterCount; AdapterIndex++)
-    {
-        context->DisplayCount = 0;
-
-        // 枚举当前适配器的显示输出设备并获取显示设备数量
-        Result = ctlEnumerateDisplayOutputs(context->hDevices[AdapterIndex], &context->DisplayCount,
-                                            context->hDisplayOutput);
-        if (Result != CTL_RESULT_SUCCESS)
-            return false; // 若失败，返回false
-
-        // 为显示输出句柄分配内存
-        context->hDisplayOutput =
-            (ctl_display_output_handle_t *)malloc(sizeof(ctl_display_output_handle_t) * context->DisplayCount);
-
-        // 再次枚举显示输出设备，获取实际的显示输出句柄
-        Result = ctlEnumerateDisplayOutputs(context->hDevices[AdapterIndex], &context->DisplayCount,
-                                            context->hDisplayOutput);
-        if (Result != CTL_RESULT_SUCCESS)
-            return false; // 若失败，返回false
-    }
-
-    return true;
-}
 
 /**
  * @description: 清理设备上下文中的资源

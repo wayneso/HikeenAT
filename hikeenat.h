@@ -20,10 +20,13 @@ public:
     ~HikeenAT();
 
 private slots:
-    void on_link_pushButton_clicked();
+    void Sent_Data_Timer_CallBack();
+
+    void on_start_pushButton_clicked(bool checked);
+
+    void on_link_pushButton_clicked(bool checked);
 
 private:
     Ui::HikeenAT *ui;
-    DeviceContext Intel_API_Display = {0};
 };
 #endif // HIKEENAT_H
