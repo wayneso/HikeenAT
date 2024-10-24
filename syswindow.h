@@ -21,6 +21,9 @@ signals:
 protected:
     void closeEvent(QCloseEvent *event) override; // 重写closeEvent
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::syswindow *ui;
 };

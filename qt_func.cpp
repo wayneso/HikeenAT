@@ -134,7 +134,7 @@ void Sent_Data_Handle(QString sent_data_str, QVector<int> &sent_data_array)
     }
     int dataLength = sent_data_array.size(); // 获取当前数据长度
     int all_dataLength = dataLength + 3; // 计算总数据长度
-    dataLength ^= DDCCI_cmd_status_flag; // 进行数据长度操作
+    dataLength ^= DDCCI_CMD_Status_Flag; // 进行数据长度操作
     sent_data_array.insert(0, master_addr); // 插入主设备地址
     sent_data_array.insert(1, slaver_addr); // 插入从设备地址
     sent_data_array.insert(2, (dataLength)); // 插入处理后的数据长度

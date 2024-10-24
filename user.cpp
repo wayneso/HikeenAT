@@ -13,8 +13,8 @@
 #include <QVector>
 #include "user.h"
 
-int master_addr = DDCCI_master_addr;
-int slaver_addr = DDCCI_slaver_addr;
+int master_addr = DDCCI_Master_Addr;
+int slaver_addr = DDCCI_Slaver_Addr;
 int rece_data_arr[MAX_VALUES];
 int query_data_arr[MAX_VALUES];
 int query_data_len = 0;
@@ -58,3 +58,62 @@ int CalculateChecksum(QVector<int> dataArray[], int length, int checksum_type) {
     checksum &= 0xFF;  // 确保校验和在 0x00 到 0xFF 之间
     return checksum;  // 返回计算的校验和
 }
+
+uint8_t calculate_checksum(const DDCCI_Frame &frame) {
+    uint8_t checksum = 0;
+    checksum ^= frame.masterAddr;
+    checksum ^= frame.slaverAddr;
+    checksum ^= frame.datalen;
+    checksum ^= frame.commandtype;
+    checksum ^= frame.command;
+    for (int value : frame.data) {
+        checksum ^= static_cast<uint8_t>(value);
+    }
+    return checksum;
+}
+
+QVector<int> SetData_Build_Frame(DDCCI_Frame &frame, uint8_t command, QVector<int> data) {
+    frame.masterAddr = DDCCI_Master_Addr;
+    frame.slaverAddr = DDCCI_Slaver_Addr;
+    frame.commandtype = DDCCI_CMD_Set_Data_Flag;
+    frame.command = command;
+    frame.data = data;
+    frame.datalen = (2 + data.size()) ^ DDCCI_CMD_Status_Flag;
+    frame.checksum = calculate_checksum(frame);
+
+    QVector<int> frameData;
+    frameData.append(frame.masterAddr);
+    frameData.append(frame.slaverAddr);
+    frameData.append(frame.datalen);
+    frameData.append(frame.commandtype);
+    frameData.append(frame.command);
+    if (!frame.data.isEmpty()) {
+        frameData.append(frame.data);
+    }
+    frameData.append(frame.checksum);
+    return frameData;
+}
+
+QVector<int> QueryData_Build_Frame(DDCCI_Frame &frame, uint8_t command, QVector<int> data) {
+    frame.masterAddr = DDCCI_Master_Addr;
+    frame.slaverAddr = DDCCI_Slaver_Addr;
+    frame.commandtype = DDCCI_CMD_Query_Data_Flag;
+    frame.command = command;
+    frame.data = data;
+    frame.datalen = (2 + data.size()) ^ DDCCI_CMD_Status_Flag;
+    frame.checksum = calculate_checksum(frame);
+
+    QVector<int> frameData;
+    frameData.append(frame.masterAddr);
+    frameData.append(frame.slaverAddr);
+    frameData.append(frame.datalen);
+    frameData.append(frame.commandtype);
+    frameData.append(frame.command);
+    if (!frame.data.isEmpty()) {
+        frameData.append(frame.data); // 将数据数组添加到 QVector 中
+    }
+    frameData.append(frame.checksum);
+    return frameData;
+}
+
+

@@ -114,11 +114,11 @@ ctl_result_t I_I2C_Write(DeviceContext *context, QVector<int> Array)
                 ctl_i2c_access_args_t I2CArgs = {0};
                 int len = Array.at(2); // 获取长度信息
                 Array.remove(0, 2);    // 移除数组中不需要的元素
-                len ^= DDCCI_cmd_status_flag; // 对长度进行操作
+                len ^= DDCCI_CMD_Status_Flag; // 对长度进行操作
                 I2CArgs.Size = sizeof(ctl_i2c_access_args_t);
                 I2CArgs.OpType = CTL_OPERATION_TYPE_WRITE; // 设定为写操作
-                I2CArgs.Address = DDCCI_master_addr;       // 主设备地址
-                I2CArgs.Offset = DDCCI_slaver_addr;        // 从设备地址
+                I2CArgs.Address = DDCCI_Master_Addr;       // 主设备地址
+                I2CArgs.Offset = DDCCI_Slaver_Addr;        // 从设备地址
                 I2CArgs.DataSize = len + 2;                // 数据大小
 
                 // 填充I2C数据
@@ -178,11 +178,11 @@ ctl_result_t I_I2C_Query(DeviceContext *context, QVector<int> Array)
                 // 从 QVector<int> 中删除前 3 个元素
                 Array.remove(0, 2);
 
-                len ^= DDCCI_cmd_status_flag;
+                len ^= DDCCI_CMD_Status_Flag;
                 I2CArgs.Size = sizeof(ctl_i2c_access_args_t);
                 I2CArgs.OpType = CTL_OPERATION_TYPE_WRITE; // 发送
-                I2CArgs.Address = DDCCI_master_addr;
-                I2CArgs.Offset = DDCCI_slaver_addr;
+                I2CArgs.Address = DDCCI_Master_Addr;
+                I2CArgs.Offset = DDCCI_Slaver_Addr;
                 I2CArgs.DataSize = len + 2;
 
                 for (size_t i = 0; i <= len; i++)
@@ -201,8 +201,8 @@ ctl_result_t I_I2C_Query(DeviceContext *context, QVector<int> Array)
                 // 接收回复报文
                 I2CArgs.Size = sizeof(ctl_i2c_access_args_t);
                 I2CArgs.OpType = CTL_OPERATION_TYPE_READ;
-                I2CArgs.Address = DDCCI_master_addr;
-                I2CArgs.Offset = DDCCI_slaver_addr;
+                I2CArgs.Address = DDCCI_Master_Addr;
+                I2CArgs.Offset = DDCCI_Slaver_Addr;
                 I2CArgs.DataSize = 11;
                 // I2CArgs.Flags = CTL_I2C_FLAG_ATOMICI2C; // Need to set this to do Atomic I2C call
                 Result = ctlI2CAccess(context->hDisplayOutput[DisplayIndex], &I2CArgs);

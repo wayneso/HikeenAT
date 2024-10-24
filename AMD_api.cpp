@@ -145,9 +145,7 @@ bool A_I2C_Write(ADLPROCS& adlprocs, int& iAdapterIndex, int& iDisplayIndex, QVe
 bool A_I2C_Query(ADLPROCS& adlprocs, int& iAdapterIndex, int& iDisplayIndex, QVector<int> Array)
 {
     int ADL_Err = ADL_ERR;
-    // UCHAR ucGetCommandReplyWrite[GETREPLYWRITESIZE]	={0x6F};
-    UCHAR ucGetCommandReplyWrite[1]	={0};
-    ucGetCommandReplyWrite[0] = master_addr;
+    UCHAR ucGetCommandReplyWrite[1]	={0x6F};
     char* query_data = new char[Array.size()];
     char* rece_data = new char[rece_data_len];
     for (size_t i = 0; i < Array.size(); i++)

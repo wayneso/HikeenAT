@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QTextEdit>
-#include <QVector> // 确保包含 QVector 的头文件
+#include <QVector>
 
 enum
 {
@@ -22,6 +22,6 @@ void Sent_Data_Handle(QString sent_data_str, QVector<int> &sent_data_array);
 
 void Sent_Data_Handle_EDID(QString sent_data_str, QVector<int> &sent_data_array);
 
-void QStrToQVec(QString str, QVector<int> &data); // 修改为引用
+void QStrToQVec(QString str, QVector<int> &data);
 
 #endif

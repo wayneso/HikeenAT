@@ -46,23 +46,7 @@ enum
     AMD_API
 };
 
-#define MAX_VALUES 256 // 允许的最大数据个数
 
-/*协议地址及标志位*/
-#define DDCCI_master_addr 0x6E // 主机地址
-#define DDCCI_slaver_addr 0X51 // 从机地址
-#define DDCCI_cmd_status_flag 0X80
-
-/* 主机命令标志位 */
-#define DDCCI_CMD_query_data_flag 0x01
-#define DDCCI_CMD_set_data_flag 0x04
-
-/* 从机命令标志位 */
-#define DDCCI_CMD_query_data_replay_flag 0x02 // 从机回复命令标志位
-
-/* 命令类型 */
-#define DDCCI_CMD_type_brightness 0x10
-#define DDCCI_CMD_type_contrast 0x12
 
 /* Intel API */
 extern ctl_init_args_t CtlInitArgs;

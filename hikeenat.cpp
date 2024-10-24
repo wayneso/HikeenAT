@@ -108,7 +108,7 @@ void HikeenAT::on_link_pushButton_clicked(bool checked)
             QMessageBox::critical(this, "错误", "初始化显卡API失败", QMessageBox::Ok);
         }
     }
-    else // 如果按键被释放
+    else
     {
         ui->link_pushButton->setText("连接平台");
         ui->displaynum_comboBox->clear();
@@ -154,55 +154,46 @@ void HikeenAT::on_start_pushButton_clicked(bool checked)
 void HikeenAT::Sent_Data_Timer_CallBack()
 {
     appendLog(ui->informatio_textEdit,"");
-    QVector<int> data = {0x6E, 0X51, 0X84, 0X03, 0X10, 0X00, 0X32, 0X9A};
-    QVector<int> query_data = {0x6E, 0X51, 0X82, 0X01, 0X10, 0XAC};
+    DDCCI_Frame data_frame;
+
+    QVector<int> data = {0X00, 0X32};
+    QVector<int> sent_data = SetData_Build_Frame(data_frame, DDCCI_CMD_Type_Brightness, data);
+    QVector<int> query_data = QueryData_Build_Frame(data_frame, DDCCI_CMD_Type_Brightness);
     QVector<int> rece_data_array;
     rece_data_len = 11;
     Sent_Data_Count.total++;
     QString currentValue = ui->api_comboBox->currentText();
     if (API == Intel_API)
     {
-        if (CTL_RESULT_SUCCESS == I_I2C_Write(&Intel_API_Display, data))
-        {
+        if (CTL_RESULT_SUCCESS == I_I2C_Write(&Intel_API_Display, sent_data))
             Sent_Data_Count.success++;
-        }
         else
             Sent_Data_Count.fail++;
         Sleep(100);
         if (CTL_RESULT_SUCCESS == I_I2C_Query(&Intel_API_Display, query_data))
-        {
             Query_Data_Count.total++;
-        }
     }
 
     else if (API == Nvidia_API)
     {
-        if (N_I2C_Write(hGpu, outputID, data))
-        {
+        if (N_I2C_Write(hGpu, outputID, sent_data))
             Sent_Data_Count.success++;
-        }
         else
             Sent_Data_Count.fail++;
         Sleep(100);
         if (N_I2C_Query(hGpu, outputID, query_data))
-        {
             Query_Data_Count.total++;
-        }
     }
 
     else if (API == AMD_API)
     {
-        if (A_I2C_Write(adlprocs, iAdapterIndex, iDisplayIndex, data))
-        {
+        if (A_I2C_Write(adlprocs, iAdapterIndex, iDisplayIndex, sent_data))
             Sent_Data_Count.success++;
-        }
         else
             Sent_Data_Count.fail++;
         Sleep(100);
         if (A_I2C_Query(adlprocs, iAdapterIndex, iDisplayIndex, query_data))
-        {
             Query_Data_Count.total++;
-        }
     }
 
     for (int i = 0; i < rece_data_len; i++)
@@ -219,7 +210,7 @@ void HikeenAT::Sent_Data_Timer_CallBack()
     QString sent_count_label_text = "发送次数：" + QString::number(Sent_Data_Count.total) + "|" + QString::number(Sent_Data_Count.success) + "|" + QString::number(Sent_Data_Count.fail);
     ui->sent_count_label->setText(sent_count_label_text);
 
-    appendLog(ui->informatio_textEdit,"",data);
+    appendLog(ui->informatio_textEdit,"",sent_data);
     appendLog(ui->informatio_textEdit,"",query_data);
     appendLog(ui->informatio_textEdit,"",rece_data_array);
 }
